@@ -1,41 +1,59 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 
 interface CasuloLogoProps {
   className?: string;
   size?: number;
+  showText?: boolean;
 }
 
-const CasuloLogo: React.FC<CasuloLogoProps> = ({ className = "", size = 40 }) => {
-  const [error, setError] = React.useState(false);
-
-  // Use a static version to bust cache without causing re-renders
-  const logoUrl = "/logo.png?v=7";
-
-  if (error) {
-    return (
-      <div 
-        style={{ width: size, height: size }} 
-        className={`${className} flex items-center justify-center bg-emerald-50 rounded-full`}
-      >
-        {/* If logo fails, we show a simple colored circle instead of the emoji which might be "strange" */}
-        <div className="w-1/2 h-1/2 bg-emerald-200 rounded-full animate-pulse" />
-      </div>
-    );
-  }
+export const CasuloLogo: React.FC<CasuloLogoProps> = ({
+  className = '',
+  size = 38,
+  showText = false,
+}) => {
+  const [hasError, setHasError] = useState(false);
 
   return (
-    <img 
-      src={logoUrl} 
-      alt="Casulo Logo" 
-      width={size} 
-      height={size} 
-      className={`${className} object-contain`}
-      onError={() => {
-        console.error("Logo failed to load");
-        setError(true);
-      }}
-    />
+    <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
+      <div
+        style={{ width: size, height: size }}
+        className="relative shrink-0 rounded-xl overflow-hidden shadow-xs flex items-center justify-center bg-white border border-[#EAE5DC]"
+      >
+        {!hasError ? (
+          <img
+            src="/logo.png"
+            alt="Logotipo Casulo"
+            width={size}
+            height={size}
+            className="w-full h-full object-contain p-0.5"
+            onError={() => setHasError(true)}
+          />
+        ) : (
+          <div className="w-full h-full bg-[#E8EFE9] text-[#2C4A35] flex items-center justify-center">
+            <svg
+              className="w-3/5 h-3/5 text-[#466352]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10c0 4.5-2.8 8.4-6.8 9.6" />
+              <path d="M12 7c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5" />
+              <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+            </svg>
+          </div>
+        )}
+      </div>
+
+      {showText && (
+        <span className="font-display font-bold text-lg tracking-tight text-[#242220]">
+          Casulo
+        </span>
+      )}
+    </div>
   );
 };
 

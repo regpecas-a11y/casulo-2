@@ -1,5 +1,6 @@
 import React from 'react';
 import { Sparkles, Smartphone, Monitor, Volume2, VolumeX, ShieldCheck } from 'lucide-react';
+import { CasuloLogo } from '../CasuloLogo';
 
 interface HeaderProps {
   isMobileFrame: boolean;
@@ -19,25 +20,9 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className="w-full bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#EAE5DC] px-4 py-3 sticky top-0 z-30 transition-all">
       <div className="max-w-4xl mx-auto flex items-center justify-between gap-3">
-        {/* Brand Zone: Clean single-line wordmark */}
+        {/* Brand Zone: Clean single-line wordmark with official logo */}
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[#466352] text-[#F7F5F0] flex items-center justify-center shadow-sm">
-            {/* Casulo gentle leaf / nest emblem */}
-            <svg
-              className="w-5 h-5 text-[#F7F5F0]"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10c0 4.5-2.8 8.4-6.8 9.6" />
-              <path d="M12 7c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5" />
-              <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-            </svg>
-          </div>
+          <CasuloLogo size={36} />
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-display font-bold text-lg tracking-tight text-[#242220]">

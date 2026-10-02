@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, ShieldCheck, HeartHandshake, AlertCircle, Lock, Info } from 'lucide-react';
+import { CasuloLogo } from '../CasuloLogo';
 
 interface PrivacyNoticeModalProps {
   isOpen: boolean;
@@ -19,9 +20,7 @@ export const PrivacyNoticeModal: React.FC<PrivacyNoticeModalProps> = ({ isOpen, 
       <div className="w-full max-w-lg bg-[#FAF8F5] rounded-t-3xl sm:rounded-3xl border border-[#EAE5DC] shadow-2xl overflow-hidden p-6 space-y-4 max-h-[90vh] overflow-y-auto animate-slide-up">
         <div className="flex items-center justify-between border-b border-[#EAE5DC] pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#E8EFE9] text-[#2C4A35] flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5 text-[#466352]" />
-            </div>
+            <CasuloLogo size={36} />
             <div>
               <h2 id="privacy-title" className="font-display font-bold text-base text-[#242220]">
                 Sobre este Protótipo Casulo

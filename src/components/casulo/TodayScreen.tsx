@@ -13,6 +13,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { WellBeingState, HelpRequest, DailyItem } from '../../types/casulo';
+import { CasuloLogo } from '../CasuloLogo';
 
 interface TodayScreenProps {
   wellBeing: WellBeingState;
@@ -53,9 +54,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
               Gael (1 ano) · Maya (3 anos) · Theo (5 anos)
             </p>
           </div>
-          <div className="w-11 h-11 rounded-2xl bg-[#F7F5F0] border border-[#EAE5DC] flex items-center justify-center shrink-0">
-            <span className="text-lg">🌿</span>
-          </div>
+          <CasuloLogo size={46} />
         </div>
 
         {/* Anti-guilt reminder banner */}
