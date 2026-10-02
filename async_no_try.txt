@@ -1,0 +1,92 @@
+src/geminiService.ts:export const askGemini = async (prompt: string, context: string) => {
+src/components/PhaseModal.tsx:    const fetchEdu = async () => {
+src/components/PhaseModal.tsx:  const handlePhotoTrigger = async () => {
+src/components/SubscriptionWall.tsx:  const onUpgrade = async (plan: 'monthly' | 'annual') => {
+src/components/SubscriptionWall.tsx:  const onRestore = async () => {
+src/components/Community.tsx:  const handleSearch = async (val: string) => {
+src/components/Community.tsx:  const handleSendFriendRequest = async (targetId: string, targetName: string) => {
+src/components/Community.tsx:  const handleAcceptFriendRequest = async (request: FriendRequest) => {
+src/components/Community.tsx:  const handleDeclineFriendRequest = async (requestId: string) => {
+src/components/Community.tsx:  const handleOpenChat = async (targetId: string) => {
+src/components/Community.tsx:  const handleSendMessage = async () => {
+src/components/Community.tsx:  const handleMarkNotificationRead = async (notificationId: string) => {
+src/components/Community.tsx:  const handleSaveProfile = async () => {
+src/components/Community.tsx:  const takeParentPhoto = async () => {
+src/components/Community.tsx:  const handleLike = async (postId: string, likedBy: string[]) => {
+src/components/Community.tsx:  const handleAddComment = async () => {
+src/components/Community.tsx:  const handleReport = async (postId: string) => {
+src/components/Community.tsx:  const handleDeletePost = async (postId: string) => {
+src/components/Community.tsx:  const confirmDelete = async () => {
+src/components/Community.tsx:  const takePhoto = async () => {
+src/components/Community.tsx:  const handlePublish = async () => {
+src/components/Community.tsx:  const openComments = async (post: CommunityPost) => {
+src/components/DailyFeed.tsx:  const registrarComFoto = async () => {
+src/components/DailyFeed.tsx:  const handleShare = async () => {
+src/components/PrivacyModule.tsx:  const handleExport = async () => {
+src/components/PrivacyModule.tsx:  const handleDelete = async () => {
+src/components/SleepSounds.tsx:  const handlePlay = async (sound: typeof SOUNDS[0]) => {
+src/components/SleepSounds.tsx:  const startSound = async (id: string, vol: number, param: number, vib: string) => {
+src/components/SleepSounds.tsx:  const handleVibratoChange = async (v: 'off' | 'suave' | 'medio') => {
+src/components/SleepSounds.tsx:  const handleWakeLock = async () => {
+src/components/Onboarding.tsx:  const handleFinish = async () => {
+src/components/AuthLayer.tsx:  const handleGoogleAuth = async () => {
+src/components/AuthLayer.tsx:  const handleAppleAuth = async () => {
+src/components/AuthLayer.tsx:  const handleEmailAuth = async (e: React.FormEvent) => {
+src/services/notificationService.ts:export const requestNotificationPermission = async () => {
+src/services/notificationService.ts:export const onForegroundMessage = async (callback: (payload: any) => void) => {
+src/services/firebaseService.ts:export const createCommunityPost = async (postData: any) => {
+src/services/firebaseService.ts:export const sendFriendRequest = async (fromId: string, fromName: string, fromPhoto: string | null, toId: string) => {
+src/services/firebaseService.ts:export const acceptFriendRequest = async (userId: string, requestId: string, fromId: string, fromName: string) => {
+src/services/firebaseService.ts:export const declineFriendRequest = async (userId: string, requestId: string) => {
+src/services/firebaseService.ts:export const getOrCreateChat = async (participants: string[]) => {
+src/services/firebaseService.ts:export const sendMessage = async (chatId: string, senderId: string, content: string) => {
+src/services/firebaseService.ts:export const createNotification = async (notifData: any) => {
+src/services/firebaseService.ts:export const markNotificationAsRead = async (notifId: string) => {
+src/services/firebaseService.ts:export const updatePresence = async (userId: string, isOnline: boolean, hideStatus: boolean = false) => {
+src/services/firebaseService.ts:export const getCommunityPosts = async (type: string, sortBy: 'createdAt' | 'likes' = 'createdAt') => {
+src/services/firebaseService.ts:export const likePost = async (postId: string, userId: string, isLiking: boolean) => {
+src/services/firebaseService.ts:export const addComment = async (postId: string, commentData: any) => {
+src/services/firebaseService.ts:export const getComments = async (postId: string) => {
+src/services/firebaseService.ts:export const reportPost = async (postId: string) => {
+src/services/firebaseService.ts:export const deleteCommunityPost = async (postId: string) => {
+src/services/firebaseService.ts:export const updateCommunityPost = async (postId: string, data: Partial<CommunityPost>) => {
+src/services/firebaseService.ts:export const saveToSubcollection = async (userId: string, sub: string, data: any, docId?: string, encrypt: boolean = false) => {
+src/services/firebaseService.ts:export const getFromSubcollection = async (userId: string, sub: string, decrypt: boolean = false) => {
+src/services/firebaseService.ts:export const getEducationalContent = async (years: number): Promise<EducationalContent | null> => {
+src/services/firebaseService.ts:export const getUserProfile = async (userId: string) => {
+src/services/firebaseService.ts:export const saveUserProfile = async (userId: string, data: any) => {
+src/services/firebaseService.ts:export const deleteUserData = async (userId: string) => {
+src/services/firebaseService.ts:export const exportUserData = async (userId: string) => {
+src/services/localNotificationService.ts:export const setupNotifications = async (childName: string, birthDate: string, isPremium: boolean, nextMissionTitle?: string, knowledgePhrase?: string) => {
+src/services/localNotificationService.ts:export const cancelNotification = async (id: number) => {
+src/services/pushNotifications.ts:export const inicializarPush = async (userId: string) => {
+src/services/pushNotifications.ts:    await PushNotifications.addListener('registration', async (token) => {
+src/services/pushNotifications.ts:    await PushNotifications.addListener('pushNotificationReceived', async (notification) => {
+src/services/imageService.ts:export const processImageForUpload = async (base64Str: string, maxWidth: number = 1080): Promise<string> => {
+src/services/storageService.ts:export const uploadPhoto = async (userId: string, file: File, path: string): Promise<string> => {
+src/contexts/PremiumContext.tsx:    const checkEntitlements = async () => {
+src/contexts/PremiumContext.tsx:    const initRevenueCat = async () => {
+src/contexts/PremiumContext.tsx:  const handlePurchase = async (plan: 'monthly' | 'annual') => {
+src/contexts/PremiumContext.tsx:  const restorePurchases = async () => {
+src/contexts/AuthContext.tsx:    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+src/contexts/AuthContext.tsx:  const signInWithGoogle = async () => {
+src/contexts/AuthContext.tsx:  const signInWithApple = async () => {
+src/contexts/AuthContext.tsx:  const signOut = async () => {
+src/App.tsx:      const timer = setTimeout(async () => {
+src/App.tsx:      const timer = setTimeout(async () => {
+src/App.tsx:  const tirarFotoESalvarNaGaleria = async (marcoId: string) => {
+src/App.tsx:  const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+src/App.tsx:        reader.onloadend = async () => {
+src/sounds.js:      const resumeAudio = async () => {
+src/sleepSounds.js:async function getCtx() {
+src/sleepSounds.js:      const resume = async () => {
+src/sleepSounds.js:export const resumeAudioContext = async () => {
+src/sleepSounds.js:export const updateSleepVolume = async (volume) => {
+src/sleepSounds.js:export const updateSleepParam = async (param, value) => {
+src/sleepSounds.js:export const playWomb = async (volume = 0.5, bpm = 60) => {
+src/sleepSounds.js:export const playWhiteNoise = async (volume = 0.5) => {
+src/sleepSounds.js:export const playPinkNoise = async (volume = 0.5, warmth = 0.5) => {
+src/sleepSounds.js:export const playBrownNoise = async (volume = 0.5, depth = 180) => {
+src/sleepSounds.js:export const playFrequency = async (freq, volume = 0.3, vibratoLevel = 'suave') => {
+src/sleepSounds.js:export const playMix = async (volume = 0.3) => {
+src/sleepSounds.js:export const toggleWakeLock = async (enabled) => {

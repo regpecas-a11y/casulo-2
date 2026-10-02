@@ -1,0 +1,159 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Main user profile containing child information and app state",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string", "format": "email", "description": "User's email address" },
+        "name": { "type": "string", "description": "Child's name" },
+        "birthDate": { "type": "string", "format": "date", "description": "Child's birth date" },
+        "gender": { "type": "string", "enum": ["boy", "girl"], "description": "Child's gender" },
+        "onboardingDone": { "type": "boolean", "description": "Whether the user completed onboarding" },
+        "xp": { "type": "integer", "description": "User experience points" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp" },
+        "friends": { "type": "array", "items": { "type": "string" } },
+        "blockedUsers": { "type": "array", "items": { "type": "string" } },
+        "presence": {
+          "type": "object",
+          "properties": {
+            "isOnline": { "type": "boolean" },
+            "lastSeen": { "type": "string", "format": "date-time" },
+            "hideStatus": { "type": "boolean" }
+          }
+        }
+      },
+      "required": ["name", "birthDate", "gender", "onboardingDone"]
+    },
+    "FriendRequest": {
+      "title": "Friend Request",
+      "description": "A request to be friends",
+      "type": "object",
+      "properties": {
+        "fromId": { "type": "string" },
+        "fromName": { "type": "string" },
+        "fromPhoto": { "type": "string" },
+        "toId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "declined"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fromId", "toId", "status"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "A private conversation between friends",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "lastMessage": { "type": "string" },
+        "lastMessageTime": { "type": "string", "format": "date-time" },
+        "unreadCount": { "type": "object" }
+      },
+      "required": ["participants"]
+    },
+    "ChatMessage": {
+      "title": "Chat Message",
+      "description": "A message in a chat",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "senderId": { "type": "string" },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["sent", "delivered", "read"] }
+      },
+      "required": ["senderId", "content", "timestamp", "status"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "A user notification",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["like", "comment", "friend_request", "friend_accept"] },
+        "fromId": { "type": "string" },
+        "fromName": { "type": "string" },
+        "relatedId": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "type", "fromId", "fromName", "read", "createdAt"]
+    },
+    "CommunityPost": {
+      "title": "Community Post",
+      "description": "A post in the community feed",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "enum": ["question", "moment", "tip"] },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorAge": { "type": "string" },
+        "content": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "likes": { "type": "integer" },
+        "likedBy": { "type": "array" },
+        "comments": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "reported": { "type": "boolean" },
+        "era": { "type": "string" },
+        "childNamePrivacy": { "type": "string", "enum": ["public", "age_only", "private"] },
+        "childDisplayName": { "type": "string" },
+        "authorPhoto": { "type": "string" },
+        "authorPhotoPrivacy": { "type": "string", "enum": ["public", "private"] }
+      },
+      "required": ["type", "authorId", "authorName", "content", "era"]
+    },
+    "CommunityComment": {
+      "title": "Community Comment",
+      "description": "A comment on a community post",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorAge": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorId", "authorName", "content"]
+    }
+  },
+  "firestore": {
+    "/usuarios/{userId}": {
+      "schema": "User",
+      "description": "Collection of user profiles"
+    },
+    "/usuarios/{userId}/friendRequests/{requestId}": {
+      "schema": "FriendRequest",
+      "description": "Friend requests for a user"
+    },
+    "/chats/{chatId}": {
+      "schema": "Chat",
+      "description": "Private chat metadata"
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "Messages in a chat"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "User notifications"
+    },
+    "/conteudo_educativo/{docId}": {
+      "schema": { "type": "object", "properties": { "title": { "type": "string" }, "content": { "type": "string" }, "minYears": { "type": "number" }, "maxYears": { "type": "number" } } },
+      "description": "Educational content based on child's age"
+    },
+    "/community/{postId}": {
+      "schema": "CommunityPost",
+      "description": "Collection of community posts"
+    },
+    "/community/{postId}/comments/{commentId}": {
+      "schema": "CommunityComment",
+      "description": "Subcollection of comments for a post"
+    }
+  }
+}

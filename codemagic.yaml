@@ -1,0 +1,104 @@
+# Codemagic Configuration for Casulo App
+# Documentation: https://docs.codemagic.io/yaml-basic-configuration/yaml-getting-started/
+
+workflows:
+  # --- ANDROID DEBUG WORKFLOW ---
+  android-debug:
+    name: Android Debug Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      node: 22
+      java: 21
+    scripts:
+      - name: Install dependencies
+        script: |
+          rm -f package-lock.json
+          npm install
+      - name: Build web assets
+        script: |
+          npm run build
+      - name: Sync Capacitor Android
+        script: |
+          npx cap sync android
+      - name: Build Android APK (Debug)
+        script: |
+          cd android
+          # Fix corrupted gradle-wrapper.jar if needed
+          gradle wrapper
+          chmod +x gradlew
+          ./gradlew assembleDebug
+    artifacts:
+      - android/app/build/outputs/apk/debug/*.apk
+    publishing:
+      email:
+        recipients:
+          - regpecas@gmail.com
+        notify:
+          success: true
+          failure: true
+
+  # --- ANDROID RELEASE WORKFLOW ---
+  # Requires environment variables:
+  # CM_KEYSTORE (File), CM_KEYSTORE_PASSWORD, CM_KEY_ALIAS, CM_KEY_PASSWORD
+  android-release:
+    name: Android Release Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      node: 22
+      java: 21
+      groups:
+        - android_signing # Create this group in Codemagic UI
+    scripts:
+      - name: Install dependencies
+        script: |
+          rm -f package-lock.json
+          npm install
+      - name: Build web assets
+        script: |
+          npm run build
+      - name: Sync Capacitor Android
+        script: |
+          npx cap sync android
+      - name: Build Android App Bundle (AAB)
+        script: |
+          cd android
+          # Fix corrupted gradle-wrapper.jar if needed
+          gradle wrapper
+          chmod +x gradlew
+          ./gradlew bundleRelease
+    artifacts:
+      - android/app/build/outputs/bundle/release/*.aab
+    publishing:
+      email:
+        recipients:
+          - regpecas@gmail.com
+        notify:
+          success: true
+          failure: true
+
+  # --- WEB BUILD WORKFLOW ---
+  web-build:
+    name: Web Build
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    environment:
+      node: 22
+    scripts:
+      - name: Install dependencies
+        script: |
+          rm -f package-lock.json
+          npm install
+      - name: Build web assets
+        script: |
+          npm run build
+    artifacts:
+      - dist/**/*
+    publishing:
+      email:
+        recipients:
+          - regpecas@gmail.com
+        notify:
+          success: true
+          failure: true

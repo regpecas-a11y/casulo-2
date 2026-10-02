@@ -1,0 +1,51 @@
+{
+  "name": "casulo",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx server.ts",
+    "start": "tsx server.ts",
+    "build": "npx tsx scripts/generate_icons.ts && npx tsx scripts/generate_notification_icon.ts && vite build && npx cap sync",
+    "lint": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/app": "^8.0.1",
+    "@capacitor/camera": "^8.0.2",
+    "@capacitor/cli": "^8.2.0",
+    "@capacitor/core": "^8.2.0",
+    "@capacitor/filesystem": "^8.1.2",
+    "@capacitor/local-notifications": "^8.0.2",
+    "@capacitor/push-notifications": "^8.0.2",
+    "@capacitor/share": "^8.0.1",
+    "@google/genai": "^1.38.0",
+    "@ionic/pwa-elements": "^3.4.0",
+    "@revenuecat/purchases-capacitor": "^12.3.1",
+    "@types/crypto-js": "^4.2.2",
+    "@types/three": "^0.185.1",
+    "browser-image-compression": "^2.0.2",
+    "crypto-js": "^4.2.0",
+    "express": "^5.2.1",
+    "firebase": "^11.4.0",
+    "framer-motion": "^11.18.2",
+    "jimp": "^1.6.0",
+    "lucide-react": "^0.475.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.0",
+    "three": "^0.185.1",
+    "tsx": "^4.21.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

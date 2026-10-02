@@ -1,0 +1,22 @@
+{
+	"appId": "com.casulo.app",
+	"appName": "Casulo",
+	"webDir": "dist",
+	"server": {
+		"androidScheme": "https",
+		"cleartext": true
+	},
+	"plugins": {
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound",
+				"alert"
+			]
+		},
+		"LocalNotifications": {
+			"smallIcon": "ic_stat_casulo",
+			"iconColor": "#F4A261"
+		}
+	}
+}

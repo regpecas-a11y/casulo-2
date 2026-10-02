@@ -1,0 +1,20 @@
+{
+  "name": "Casulo",
+  "short_name": "Casulo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDFCF0",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "/logo.png?v=6",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png?v=6",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

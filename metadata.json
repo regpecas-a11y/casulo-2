@@ -1,0 +1,11 @@
+{
+  "name": "copia teste arena ia",
+  "description": "Casulo: protótipo demonstrativo de apoio prático, rede privada de confiança e cuidado para quem cuida de crianças de 0 a 5 anos.",
+  "requestFramePermissions": [
+    "camera",
+    "screen-wake-lock"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

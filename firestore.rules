@@ -1,0 +1,215 @@
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: usuarios
+// Document ID: userId
+// Fields:
+//   - name: string (required)
+//   - birthDate: string (required)
+//   - gender: string (required)
+//   - xp: number (optional)
+//   - friends: list (optional) - list of user IDs
+//   - blockedUsers: list (optional) - list of user IDs
+//   - presence: map (optional) - { isOnline: bool, lastSeen: timestamp, hideStatus: bool }
+//
+// Collection: usuarios/{userId}/friendRequests
+// Document ID: requestId
+// Fields:
+//   - fromId: string (required)
+//   - fromName: string (required)
+//   - fromPhoto: string (optional)
+//   - toId: string (required)
+//   - status: string (required) - 'pending', 'accepted', 'declined'
+//   - createdAt: timestamp (required)
+//
+// Collection: chats
+// Document ID: chatId
+// Fields:
+//   - participants: list (required) - list of 2 user IDs
+//   - lastMessage: string (optional)
+//   - lastMessageTime: timestamp (optional)
+//   - unreadCount: map (optional) - { userId: number }
+//
+// Collection: chats/{chatId}/messages
+// Document ID: messageId
+// Fields:
+//   - senderId: string (required)
+//   - content: string (required)
+//   - timestamp: timestamp (required)
+//   - status: string (required) - 'sent', 'delivered', 'read'
+//
+// Collection: notifications
+// Document ID: notificationId
+// Fields:
+//   - userId: string (required) - recipient
+//   - type: string (required) - 'like', 'comment', 'friend_request', 'friend_accept'
+//   - fromId: string (required) - sender
+//   - fromName: string (required)
+//   - relatedId: string (optional) - postId or requestId
+//   - read: bool (required)
+//   - createdAt: timestamp (required)
+//
+// Collection: community
+// Document ID: postId
+// Fields:
+//   - authorId: string (required)
+//   - authorName: string (required)
+//   - content: string (required)
+//   - type: string (required) - 'question', 'moment', 'tip'
+//   - likes: number (required)
+//   - likedBy: list (required)
+//   - comments: number (required)
+//   - reported: bool (required)
+//   - createdAt: timestamp (required)
+//
+// ===============================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 0. Default Deny Catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper Functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && 
+        (exists(/databases/$(database)/documents/usuarios/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.role == 'admin' ||
+         request.auth.token.email == "regpecas@gmail.com");
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Validation Blueprints
+    function isValidUser(data) {
+      return data.keys().hasAll(['name', 'birthDate', 'gender', 'onboardingDone']) &&
+             data.name is string && data.name.size() <= 100 &&
+             data.birthDate is string && data.birthDate.size() <= 20 &&
+             data.gender in ['boy', 'girl'] &&
+             data.onboardingDone is bool &&
+             (data.xp is int || !data.keys().contains('xp')) &&
+             (data.updatedAt is timestamp || !data.keys().contains('updatedAt'));
+    }
+
+    function isValidPost(data) {
+      return data.keys().hasAll(['type', 'authorId', 'authorName', 'content', 'era']) &&
+             data.type in ['question', 'moment', 'tip'] &&
+             data.authorId == request.auth.uid &&
+             data.authorName is string && data.authorName.size() <= 100 &&
+             data.content is string && data.content.size() <= 1000 &&
+             data.era is string && data.era.size() <= 50 &&
+             (data.likes is int || !data.keys().contains('likes')) &&
+             (data.likedBy is list || !data.keys().contains('likedBy')) &&
+             (data.comments is int || !data.keys().contains('comments')) &&
+             (data.reported is bool || !data.keys().contains('reported')) &&
+             (data.createdAt is timestamp || data.createdAt == null);
+    }
+
+    function isValidComment(data) {
+      return data.keys().hasAll(['authorId', 'authorName', 'content']) &&
+             data.authorId == request.auth.uid &&
+             data.authorName is string && data.authorName.size() <= 100 &&
+             data.content is string && data.content.size() <= 500;
+    }
+
+    // User Profiles
+    match /usuarios/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId) && isValidId(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+      
+      // Friend Requests subcollection
+      match /friendRequests/{requestId} {
+        allow read: if isOwner(userId) || (isSignedIn() && existing().fromId == request.auth.uid);
+        allow create: if isSignedIn() && incoming().fromId == request.auth.uid && isValidId(requestId);
+        allow update, delete: if isOwner(userId) || (isSignedIn() && existing().fromId == request.auth.uid);
+      }
+
+      // Other subcollections (Diário, Finanças, etc.)
+      match /{subcollection}/{docId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+    }
+
+    // Chats
+    match /chats/{chatId} {
+      allow read: if isSignedIn() && request.auth.uid in existing().participants;
+      allow create: if isSignedIn() && request.auth.uid in incoming().participants && isValidId(chatId);
+      allow update: if isSignedIn() && request.auth.uid in existing().participants;
+
+      match /messages/{messageId} {
+        allow read: if isSignedIn() && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        allow create: if isSignedIn() && 
+                      request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants && 
+                      incoming().senderId == request.auth.uid &&
+                      isValidId(messageId);
+      }
+    }
+
+    // Notifications
+    match /notifications/{notificationId} {
+      allow read: if isOwner(existing().userId);
+      allow create: if isSignedIn() && isValidId(notificationId); 
+      allow update: if isOwner(existing().userId) && incoming().diff(existing()).affectedKeys().hasOnly(['read']);
+      allow delete: if isOwner(existing().userId);
+    }
+
+    // Community Feed
+    match /community/{postId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(postId) && isValidPost(incoming());
+      allow update: if isSignedIn() && (
+        // Action: Author Edit
+        (request.auth.uid == existing().authorId && isValidPost(incoming())) ||
+        // Action: Social Interaction (Like/Comment Count/Report)
+        (incoming().diff(existing()).affectedKeys().hasAny(['likes', 'likedBy', 'comments', 'reported']))
+      );
+      allow delete: if isSignedIn() && (request.auth.uid == existing().authorId || isAdmin());
+
+      match /comments/{commentId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn() && isValidId(commentId) && isValidComment(incoming());
+        allow delete: if isSignedIn() && (request.auth.uid == existing().authorId || isAdmin());
+      }
+    }
+
+    // Educational Content
+    match /conteudo_educativo/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // Exercise Media & Video Links (Public Read, Auth Write)
+    match /exercise_media/{exerciseId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+  }
+}
